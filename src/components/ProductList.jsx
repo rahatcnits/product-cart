@@ -2,9 +2,11 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import Helper from "../utility/Helper.jsx";
 import FullScreenLoader from "./FullScreenLoader.jsx";
+import toast from "react-hot-toast";
 
 const ProductList = () => {
     let [data, setData] = useState(null);
+    let [loader, setLoader] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -17,10 +19,26 @@ const ProductList = () => {
         let productList = res.data["data"];
         setData(productList);
     }
+
+    const AddToCart = async (id) => {
+        try {
+            setLoader(true);
+            let res = await axios.get(`${Helper.API_BASE}/create-cart/${id}`, Helper.tokenHeader());
+            setLoader(false)
+            if (res.data["msg"] === "success") {
+                toast.success("Request Completed");
+            } else {
+                toast.error("Request Fail");
+            }
+        } catch (err) {
+            Helper.unauthorized(err.response.status);
+        }
+    }
+
     return (
         <div>
             {
-                data==null ? (<FullScreenLoader/>) : (
+                data==null || loader ? (<FullScreenLoader/>) : (
                     <div className="container">
                         <div className="row d-flex justify-content-center">
                             {
@@ -36,6 +54,8 @@ const ProductList = () => {
                                                     }
                                                 </h5>
                                                 <p>{item["title"]}</p>
+
+                                                <button onClick={() => {AddToCart(item["id"])}} type="button" className="btn btn-outline-danger">Add To Cart</button>
                                             </div>
                                         </div>
                                     )

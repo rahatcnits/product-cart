@@ -3,9 +3,11 @@ import Helper from "../utility/Helper.jsx";
 import toast from "react-hot-toast";
 import axios from "axios";
 import ButtonSpinner from "./ButtonSpinner.jsx";
+import {useNavigate} from "react-router-dom";
 
 const LoginForm = () => {
     let [Submit, SetSubmit] = useState(false);
+    let navigate = useNavigate();
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -18,9 +20,11 @@ const LoginForm = () => {
             SetSubmit(true)
             let res = await axios.post(`${Helper.API_BASE}/user-login`, {UserEmail: email});
             if (res.data["msg"]==="success") {
-                toast.success(res.data["data"])
+                toast.success(res.data["data"]);
+                sessionStorage.setItem("email", email);
+                navigate("/verify")
             } else {
-                SetSubmit(true)
+                SetSubmit(false)
             }
 
 

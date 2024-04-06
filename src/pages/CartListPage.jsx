@@ -1,9 +1,10 @@
 import MasterLayout from "../components/MasterLayout.jsx";
+import CarList from "../components/CarList.jsx";
 
 const CartListPage = () => {
   return (
       <MasterLayout>
-          <h1 style={{padding: "200px 0", textAlign: "center"}}>CartListPage</h1>
+          <CarList/>
       </MasterLayout>
   );
 };

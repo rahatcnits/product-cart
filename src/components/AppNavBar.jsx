@@ -6,6 +6,11 @@ import Logo from "../assets/images/logo.svg";
 
 
 const AppNavBar = () => {
+    const logout = () => {
+        sessionStorage.clear();
+        window.location.href = "/";
+    }
+
     return (
         <Navbar expand="lg" className="bg-body-tertiary">
           <Container fluid>
@@ -27,7 +32,7 @@ const AppNavBar = () => {
               </Nav>
                 {
                     Helper.isLogin() ? (
-                        <Button className="btn btn-danger">Logout</Button>
+                        <Button onClick={logout} className="btn btn-danger">Logout</Button>
                     ) : (
                         <Link className="btn btn-danger" to="/login">Login</Link>
                     )
